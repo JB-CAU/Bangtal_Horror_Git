@@ -11,10 +11,16 @@ int main()
 	auto room3 = Scene::create("일본도", "Images/일본도.png");
 	auto room4 = Scene::create("다과", "Images/웰컴다과.jpg");
 
+
 	auto daruma_eye = false; 
 
 	// 료칸 방 오른쪽에 벚꽃 화분을 추가한다.
 	// 료칸 방 왼쪽에 문을 여닫는 것을 추가한다.
+
+	auto daruma_sound = Sound::create("Sound/휘이익.mp3");
+	auto daruma_tiktok = Sound::create("Sound/틱톡.mp3");
+	// auto tea_slip_sound = Sound::create("Sounds/.");
+	auto tea_death_sound = Sound::create("Sound/뿌웅.wav");
 
 	auto brush = Object::create("Images/붓.png", room1, 500, 180);
 	brush->setScale(0.1f);
@@ -54,14 +60,13 @@ int main()
 		if (brush->isHanded()) // 추후에 아이템 합치기 넣어서 잉크병이랑 붓 합칠 때 상호작용하게끔 바꾸자
 		{
 			daruma->setImage("Images/다루마_눈칠함.png");
-			showMessage("스산한 느낌과 함께 철컥하는 소리가 들렸다.");
-			// 스산한 배경음악 코드 추가
-			// 추후 똑딱거리는 소리가 8번 나게끔 코드를 추가한다. 암호에 사용할 것.
-			// 이후로부터 방 왼편의 색즉시공의 "공" 부분이 붉게 변한다. (암호)
+			showMessage("눈을 칠했다. \n 인형 안에서 톱니바퀴 소리가 들린다.");
+	
+			daruma_tiktok->play(false); // 5번 똑딱거리고, "5"가 암호의 힌트가 되도록 반복되게끔 구현하자. 
 		}
 		else
 		{
-			showMessage("눈을 칠하고 소원을 빌면 이루어준다는 인형이다.\n 아직은 눈이 안 칠해져있다. \n 여기서 나가게 해줘.");
+			showMessage("눈을 칠하고 소원을 빌면 이루어준다는 인형이다.\n 여기서 나가게 해줘.");
 		}
 		return true;
 		});
