@@ -1,20 +1,74 @@
-﻿// Bangtal_Horror_Git.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
+﻿#include <bangtal>
 
-#include <iostream>
+using namespace bangtal;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+
+	auto room1 = Scene::create("룸1", "Images/료칸(방1)_다루마.jpg");
+	auto room2 = Scene::create("룸2", "Images/료칸_반전(방2).png");
+	// 차를 4번 이상 마시면 정신이 혼미해져서 방2로 이동한다.
+	auto room3 = Scene::create("일본도", "Images/일본도.png");
+	auto room4 = Scene::create("다과", "Images/웰컴다과.jpg");
+
+	auto daruma_eye = false; 
+
+	// 료칸 방 오른쪽에 벚꽃 화분을 추가한다.
+	// 료칸 방 왼쪽에 문을 여닫는 것을 추가한다.
+
+	auto brush = Object::create("Images/붓.png", room1, 500, 180);
+	brush->setScale(0.1f);
+	brush->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		showMessage("부드러운 새의 깃털, 마호가니 나무, 분명 비싼 붓이다.\n 심지 부분은 바짝 말라 있다.");
+		brush->pick();
+		return 0;
+		});
+
+	auto exit = Object::create("Images/화살표.png", room3, 470, 30);
+	exit->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		room1->enter();
+		return 0;
+		});
+
+	auto click_object = Object::create("Images/투명배경.png", room1, 445, 250);
+	click_object->setScale(0.3f);
+	click_object->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		room3->enter();
+		showMessage("화려하게 장식된 검이다. \n 매끈하고 예리하게 다듬어져 있다.");
+		return 0;
+		});
+
+	auto pillow = Object::create("Images/다홍색_방석.png", room1, 780, 210);
+	pillow->setScale(0.2f);
+	pillow->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		showMessage("이질적으로 생겼지만 푹신한....\n 어라, 딱딱한 무언가가 만져진다. \n 어딘가 쓸모가 있을지도?");
+		pillow->pick();
+		return 0;
+		});
+	// 방석을 일본도에 가져다대면 찢어지고, 거기서 잉크를 얻는 코드 추가
+
+	auto daruma = Object::create("Images/다루마_눈없음.png", room1, 810, 340);
+	daruma->setScale(0.1f);
+
+	daruma->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		if (brush->isHanded()) // 추후에 아이템 합치기 넣어서 잉크병이랑 붓 합칠 때 상호작용하게끔 바꾸자
+		{
+			daruma->setImage("Images/다루마_눈칠함.png");
+			showMessage("스산한 느낌과 함께 철컥하는 소리가 들렸다.");
+			// 스산한 배경음악 코드 추가
+			// 추후 똑딱거리는 소리가 8번 나게끔 코드를 추가한다. 암호에 사용할 것.
+			// 이후로부터 방 왼편의 색즉시공의 "공" 부분이 붉게 변한다. (암호)
+		}
+		else
+		{
+			showMessage("눈을 칠하고 소원을 빌면 이루어준다는 인형이다.\n 아직은 눈이 안 칠해져있다. \n 여기서 나가게 해줘.");
+		}
+		return true;
+		});
+
+	startGame(room1);
+
+
+	return 0;
 }
 
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
